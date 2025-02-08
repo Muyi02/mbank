@@ -14,6 +14,7 @@ import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 import SignUp from '@/app/(auth)/sign-up/page'
 import { useRouter } from 'next/navigation'
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions'
 
 
 
@@ -21,7 +22,7 @@ const AuthForm = ({type}: {type: string}) => {
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-
+    
     const formSchema = authFormSchema(type);
 
      // 1. Define your form.
@@ -37,24 +38,25 @@ const AuthForm = ({type}: {type: string}) => {
         const onSubmit = async (data: z.infer<typeof formSchema>) =>{
             // Do something with the form values.
             // ✅ This will be type-safe and validated.
+            console.log("Appwrite Project ID:", process.env.NEXT_PUBLIC_APPWRITE_PROJECT);
             setIsLoading(true);
 
             try {
                 //Sign up with Appwrite & create plain link token
 
                 if(type === 'sign-up'){
-                    // const newUser = await signUp(data);
+                     const newUser = await signUp(data);
 
-                    // setUser(newUser)
+                     setUser(newUser)
 
                 }
                 if (type === 'sign-in'){
-                //     const response = await signIn({
-                //      email: data.email,
-                //      password: data.password,
-                // })
+                     const response = await signIn({
+                     email: data.email,
+                      password: data.password,
+                 })
 
-                // if(response) router.push('/')
+                 if(response) router.push('/')
                     
 
                 }
@@ -117,15 +119,12 @@ const AuthForm = ({type}: {type: string}) => {
                                 <CustomInput 
                                 control={form.control} name='address1' label = 'Address'
                                 placeholder='Enter your specific address'/>
-                                 <CustomInput 
-                                control={form.control} name='city' label = 'City'
-                                placeholder='Example: Manchester'/>
+                                 
 
                                 <div className='flex gap-4'>
-
                                     <CustomInput 
-                                    control={form.control} name='county' label = 'County'
-                                    placeholder='Example: Lancashire'/>
+                                    control={form.control} name='city' label = 'City'
+                                    placeholder='Example: Manchester'/>
                                     <CustomInput 
                                     control={form.control} name='postalCode' label = 'Postal Code'
                                     placeholder='Example: A1/AB1 23CD'/>
