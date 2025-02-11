@@ -15,6 +15,7 @@ import { Loader2 } from 'lucide-react'
 import SignUp from '@/app/(auth)/sign-up/page'
 import { useRouter } from 'next/navigation'
 import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions'
+import PlaidLink from './PlaidLink'
 
 
 
@@ -38,16 +39,40 @@ const AuthForm = ({type}: {type: string}) => {
         const onSubmit = async (data: z.infer<typeof formSchema>) =>{
             // Do something with the form values.
             // ✅ This will be type-safe and validated.
-            console.log("Appwrite Project ID:", process.env.NEXT_PUBLIC_APPWRITE_PROJECT);
+            console.log("Form data submitted:", data);
             setIsLoading(true);
 
             try {
                 //Sign up with Appwrite & create plain link token
 
-                if(type === 'sign-up'){
-                     const newUser = await signUp(data);
+              
 
-                     setUser(newUser)
+                if(type === 'sign-up'){
+
+                    const userData = {
+                        firstName: data.firstName!,
+                        lastName: data.lastName!,
+                        address1: data.address1!,
+                        city: data.city!,
+                        state: data.state!,
+                        postalCode: data.postalCode!,
+                        dateOfBirth: data.dateOfBirth!,
+                        ssn: data.ssn!,
+                        email: data.email,
+                        password: data.password,
+                    }
+
+                    console.log("Sending data to signUp:", userData);
+
+                    try{
+                     const newUser = await signUp(userData);
+                     console.log("Sign-up successful:", newUser);
+
+                     setUser(newUser);
+                    }catch(error){
+                        console.error("Error during sign-up:", error);
+
+                    }
 
                 }
                 if (type === 'sign-in'){
@@ -97,7 +122,7 @@ const AuthForm = ({type}: {type: string}) => {
         </header>
         {user ?(
             <div className='flex flex-col gap-4'>
-               {/*PlaidLink */}
+               <PlaidLink user={user} variant="primary"/>
             </div>
         ): (
             <>
@@ -125,6 +150,9 @@ const AuthForm = ({type}: {type: string}) => {
                                     <CustomInput 
                                     control={form.control} name='city' label = 'City'
                                     placeholder='Example: Manchester'/>
+                                     <CustomInput 
+                                control={form.control} name='state' label = 'State'
+                                placeholder='Enter your State'/>
                                     <CustomInput 
                                     control={form.control} name='postalCode' label = 'Postal Code'
                                     placeholder='Example: A1/AB1 23CD'/>
@@ -135,7 +163,7 @@ const AuthForm = ({type}: {type: string}) => {
                                     control={form.control} name='dateOfBirth' label = 'Date of Birth'
                                     placeholder='YYYY-MM-DD'/>
                                     <CustomInput 
-                                    control={form.control} name='ni' label = 'NI'
+                                    control={form.control} name='ssn' label = 'ssn'
                                     placeholder='Example: AB123456-C'/>
                                 </div>    
                             </>
@@ -157,8 +185,9 @@ const AuthForm = ({type}: {type: string}) => {
                                     className='animate-spin'/> &nbsp;
                                     Loading...
                                     </>
-                                ) : type === 'sign-in'
-                                ? 'Sign In': 'Sign Up'}
+                                ):type === 'sign-in'
+                                ? 'Sign In': 'Sign Up'
+                            }
                             </Button>
                         </div>
                         
@@ -177,7 +206,7 @@ const AuthForm = ({type}: {type: string}) => {
                      </Link>
                 </footer>
             </>
-        )}
+   )}
     </section>
   )
 }
