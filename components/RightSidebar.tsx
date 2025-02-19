@@ -9,7 +9,7 @@ const RightSidebar = ({ user, transactions, banks}: RightSidebarProps) => {
 
   const categories: CategoryCount[] = countTransactionCategories(transactions);
 
-  console.log(categories)
+  console.log(categories.length)
   return (
     <aside className='right-sidebar'>
        <section className ='felx flex-col pb-8'>
