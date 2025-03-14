@@ -28,21 +28,10 @@ import { Textarea } from "./ui/textarea";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
-  name: z.string()
-    .trim()
-    .min(4, "Transfer note must be at least 4 characters")
-    .max(50, "Transfer note is too long"),
-  amount: z.string()
-    .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount (e.g., 100 or 100.50)"),
-  senderBank: z.string()
-    .trim()
-    .min(4, "Please select a valid bank account")
-    .max(50, "Bank name is too long"),
-  shareableId: z.string()
-    .trim()
-    .min(8, "Shareable ID must be at least 8 characters")
-    .max(20, "Shareable ID is too long")
-    .regex(/^[a-zA-Z0-9]+$/, "Shareable ID can only contain letters and numbers"),
+  name: z.string().min(4, "Transfer note is too short"),
+  amount: z.string().min(4, "Amount is too short"),
+  senderBank: z.string().min(4, "Please select a valid bank account"),
+  shareableId: z.string().min(8, "Please select a valid sharable Id"),
 });
 
 const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
