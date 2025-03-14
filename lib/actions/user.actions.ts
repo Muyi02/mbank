@@ -271,7 +271,7 @@ export const getBankByAccountId = async ({ accountId }: getBankByAccountIdProps)
     const bank = await database.listDocuments(
       DATABASE_ID!,
       BANK_COLLECTION_ID!,
-      [Query.equal('$id', [accountId])]
+      [Query.equal('accountId', [accountId])]
     )
 
     return parseStringify(bank.documents[0]);

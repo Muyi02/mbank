@@ -31,7 +31,7 @@ const formSchema = z.object({
   name: z.string().min(4, "Transfer note is too short"),
   amount: z.string().min(4, "Amount is too short"),
   senderBank: z.string().min(4, "Please select a valid bank account"),
-  shareableId: z.string().min(8, "Please select a valid sharable Id"),
+  shareableId: z.string().min(8, "Please select a valid shareable Id"),
 });
 
 const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
@@ -51,19 +51,38 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-
+  
     try {
       const receiverAccountId = decryptId(data.shareableId);
       const receiverBank = await getBankByAccountId({
         accountId: receiverAccountId,
       });
+  
       const senderBank = await getBank({ documentId: data.senderBank });
+  
+      // 🔍 Add logging here to debug issues
+      console.log("Receiver Bank Data:", receiverBank);
+      console.log("Sender Bank Data:", senderBank);
+  
+      if (!receiverBank) {
+        throw new Error("Receiver bank not found");
+      }
+      if (!receiverBank.fundingSourceUrl) {
+        throw new Error("Receiver bank missing fundingSourceUrl");
+      }
+      if (!senderBank) {
+        throw new Error("Sender bank not found");
+      }
+      if (!senderBank.fundingSourceUrl) {
+        throw new Error("Sender bank missing fundingSourceUrl");
+      }
 
       const transferParams = {
         sourceFundingSourceUrl: senderBank.fundingSourceUrl,
         destinationFundingSourceUrl: receiverBank.fundingSourceUrl,
         amount: data.amount,
       };
+
       // create transfer
       const transfer = await createTransfer(transferParams);
 
@@ -195,7 +214,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
             <FormItem className="border-t border-gray-200">
               <div className="payment-transfer_form-item pb-5 pt-6">
                 <FormLabel className="text-14 w-full max-w-[280px] font-medium text-gray-700">
-                  Receiver&apos;s Plaid Sharable Id
+                  Receiver&apos;s Plaid Shareable Id
                 </FormLabel>
                 <div className="flex w-full flex-col">
                   <FormControl>
