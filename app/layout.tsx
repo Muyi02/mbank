@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "MBank",
   description: "MBank is a modern banking platform for everyone.",
   icons: {
-    icon: '/icons/logo.svg'
+    icon: '/icons/Mlogo.svg'
   }
 };
 

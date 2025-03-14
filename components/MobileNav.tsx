@@ -32,9 +32,9 @@ const MobileNav = ({user} : MobileNavProps) => {
             </SheetTrigger>
             <SheetContent side='left' className="border-none bg-white">
                 <Link href='/' className ='cursor-pointer flex items-center gap-1 px-4'>
-                    <Image src = '/icons/logo.svg'  
-                            width={34}
-                            height={34}   
+                    <Image src = '/icons/Mlogo.svg'  
+                            width={100}
+                            height={100}   
                             alt='MBank logo'      
                     />
                     <h1 className='text-26 font-ibm-plex-serif font-bold text-black-1'>MBank</h1>
@@ -49,7 +49,7 @@ const MobileNav = ({user} : MobileNavProps) => {
                                     return(
 
                                         <SheetClose asChild key={item.route}>
-                                                <Link  href={item.route} key={item.label} className={cn('mobilenav-sheet_close w-full', {'bg-bank-gradient': isActive})}>
+                                                <Link  href={item.route} key={item.label} className={cn('mobilenav-sheet_close w-full', {'bg-gray-700': isActive})}>
                                                     
                                                         <Image
                                                         src={item.imgURL}

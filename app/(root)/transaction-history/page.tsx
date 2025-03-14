@@ -41,7 +41,7 @@ const TransactionHistory = async ({searchParams: {id, page}}: SearchParamProps) 
             <h2 className='text-18 font-bold text-white'>
               {account?.data.name}
             </h2>
-            <p className = 'text-14 text-blue-25'>
+            <p className = 'text-14 text-gray-700'>
               {account?.data.officialName}
             </p>
             <p className='text-14 font-semibold tracking-[1.1px] text-white'>

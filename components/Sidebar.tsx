@@ -16,11 +16,11 @@ const Sidebar = ({user}: SiderbarProps) => {
     <section className='sidebar'>
         <nav className = 'flex flex-col gap-4'>
           <Link href='/' className ='mb-12 cursor-pointer flex items-center gap-2'>
-           <Image src = '/icons/logo.svg'  
-                width={34}
-                height={34}   
+           <Image src = '/icons/Mlogo.svg'  
+                width={100}
+                height={100}   
                 alt='MBank logo'
-                className ='size-[24px] max-xl:size-14'      
+                className ='size-[75px] max-xl:size-30'      
            />
            <h1 className='sidebar-logo'>MBank</h1>
           </Link>
@@ -29,7 +29,7 @@ const Sidebar = ({user}: SiderbarProps) => {
 
             const isActive = pathname ===item.route || pathname.startsWith(`${item.route}/`)
             return(
-                <Link  href={item.route} key={item.label} className={cn('sidebar-link', {'bg-bank-gradient': isActive})}>
+                <Link  href={item.route} key={item.label} className={cn('sidebar-link', {'bg-gray-700': isActive})}>
                    <div className='relative size-6'>
                     <Image
                       src={item.imgURL}
