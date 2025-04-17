@@ -1,6 +1,5 @@
-import AuthForm from '@/components/AuthForm'
+import AuthForm from '@/components/AuthForm';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
-import { Section } from 'lucide-react'
 import React from 'react'
 
 const SignUp = async () => {

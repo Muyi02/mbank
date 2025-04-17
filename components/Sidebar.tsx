@@ -8,7 +8,6 @@ import { usePathname } from 'next/navigation'
 import Footer from './Footer';
 import PlaidLink from './PlaidLink';
 
-
 const Sidebar = ({user}: SiderbarProps) => {
     
   const pathname = usePathname();
@@ -24,7 +23,6 @@ const Sidebar = ({user}: SiderbarProps) => {
            />
            <h1 className='sidebar-logo'>MBank</h1>
           </Link>
-
           {sidebarLinks.map((item)=>{
 
             const isActive = pathname ===item.route || pathname.startsWith(`${item.route}/`)
@@ -53,5 +51,4 @@ const Sidebar = ({user}: SiderbarProps) => {
     </section>
   )
 }
-
 export default Sidebar

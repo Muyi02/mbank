@@ -1,5 +1,4 @@
 import AuthForm from '@/components/AuthForm'
-import { Section } from 'lucide-react'
 import React from 'react'
 
 const SignIn = () => {

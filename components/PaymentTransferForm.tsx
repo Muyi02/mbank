@@ -5,7 +5,7 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+
 
 import { createTransfer } from "@/lib/actions/dwolla.actions";
 import { createTransaction } from "@/lib/actions/transactions.actions";
@@ -26,12 +26,27 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
+
+import * as z from "zod";
+
 const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  name: z.string().min(4, "Transfer note is too short"),
-  amount: z.string().min(4, "Amount is too short"),
-  senderBank: z.string().min(4, "Please select a valid bank account"),
-  shareableId: z.string().min(8, "Please select a valid shareable Id"),
+    email: z.string().email("Invalid email address"),
+    name: z.string()
+      .trim()
+      .min(4, "Transfer note must be at least 4 characters")
+      .max(50, "Transfer note is too long"),
+    amount: z.string()
+      .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount (e.g., 100 or 100.50)"),
+    senderBank: z.string()
+      .trim()
+      .min(4, "Please select a valid bank account")
+      .max(50, "Bank name is too long"),
+      
+    shareableId: z.string()
+      .trim()
+      .min(8, "Shareable ID must be at least 8 characters")
+      .max(20, "Shareable ID is too long")
+      .regex(/^[a-zA-Z0-9]+$/, "Shareable ID can only contain letters and numbers"),
 });
 
 const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
@@ -152,7 +167,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
               <div className="payment-transfer_form-item pb-6 pt-5">
                 <div className="payment-transfer_form-content">
                   <FormLabel className="text-14 font-medium text-gray-700">
-                    Transfer Note (Optional)
+                    Transfer Note
                   </FormLabel>
                   <FormDescription className="text-12 font-normal text-gray-600">
                     Please provide any additional information or instructions
@@ -206,7 +221,6 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="shareableId"
@@ -230,7 +244,6 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="amount"

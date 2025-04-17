@@ -2,17 +2,14 @@
 import  Link from 'next/link'
 import Image from 'next/image'
 import React, {useState} from 'react'
-
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Form } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import CustomInput from './CustomInput'
 import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
-import SignUp from '@/app/(auth)/sign-up/page'
 import { useRouter } from 'next/navigation'
 import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions'
 import PlaidLink from './PlaidLink'
@@ -26,7 +23,7 @@ const AuthForm = ({type}: {type: string}) => {
     
     const formSchema = authFormSchema(type);
 
-     // 1. Define your form.
+     // 1. Defining the form.
         const form = useForm<z.infer<typeof formSchema >>({
             resolver: zodResolver(formSchema),
             defaultValues: {
@@ -36,8 +33,9 @@ const AuthForm = ({type}: {type: string}) => {
         })
         
         // 2. Define a submit handler.
+        // Handles both Sign Up and Sign In flows depending on the "type" prop passed to AuthForm
         const onSubmit = async (data: z.infer<typeof formSchema>) =>{
-            // Do something with the form values.
+        
             // ✅ This will be type-safe and validated.
             console.log("Form data submitted:", data);
             setIsLoading(true);
@@ -48,6 +46,8 @@ const AuthForm = ({type}: {type: string}) => {
               
 
                 if(type === 'sign-up'){
+                    // ----- SIGN UP FLOW -----
+                    // If the form is in sign-up mode, gather full user details
 
                     const userData = {
                         firstName: data.firstName!,
@@ -65,29 +65,34 @@ const AuthForm = ({type}: {type: string}) => {
                     console.log("Sending data to signUp:", userData);
 
                     try{
+                     // Attempt to register the user via Appwrite backend function   
                      const newUser = await signUp(userData);
                      console.log("Sign-up successful:", newUser);
 
-                     setUser(newUser);
+                     setUser(newUser);// Updates local state with the new user object
                     }catch(error){
                         console.error("Error during sign-up:", error);
 
                     }
 
                 }
+                // ----- SIGN IN FLOW -----
                 if (type === 'sign-in'){
+                    // Sends email and password for login
                      const response = await signIn({
                      email: data.email,
                       password: data.password,
                  })
-
+                // If successful, redirect user to homepage
                  if(response) router.push('/')
                     
 
                 }
+                // Catch unexpected errors
             } catch (error) {
                 console.log(error);
             } finally {
+                // Turn off loading indicator regardless of result
                 setIsLoading(false);
             }
         }
@@ -155,7 +160,7 @@ const AuthForm = ({type}: {type: string}) => {
                                 placeholder='Enter your State'/>
                                     <CustomInput 
                                     control={form.control} name='postalCode' label = 'Postal Code'
-                                    placeholder='Example: A1/AB1 23CD'/>
+                                    placeholder='"12345"'/>
                                 </div>    
 
                                 <div className='flex gap-4'>
@@ -164,7 +169,7 @@ const AuthForm = ({type}: {type: string}) => {
                                     placeholder='YYYY-MM-DD'/>
                                     <CustomInput 
                                     control={form.control} name='ssn' label = 'ssn'
-                                    placeholder='Example: AB123456-C'/>
+                                    placeholder='"1234"'/>
                                 </div>    
                             </>
                         )}

@@ -14,7 +14,6 @@ const TransactionHistory = async ({searchParams: {id, page}}: SearchParamProps) 
   
       if (!accounts)return;
   
-  
       const accountsData = accounts?.data;
       const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
   
@@ -72,5 +71,4 @@ const TransactionHistory = async ({searchParams: {id, page}}: SearchParamProps) 
     </div>
   )
 }
-
 export default TransactionHistory

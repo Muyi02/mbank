@@ -2,7 +2,6 @@ import React from 'react'
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -79,13 +78,10 @@ const TransactionsTable = ({transactions}: TransactionTableProps) => {
                                         <CategoryBadge category={t.category}/>
                                     </TableCell>
                                 </TableRow>
-
                             )
-
                         })}
                     </TableBody>
                 </Table>
-
   )
 }
 
