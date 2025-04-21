@@ -45,7 +45,7 @@ const formSchema = z.object({
     shareableId: z.string()
       .trim()
       .min(8, "Shareable ID must be at least 8 characters")
-      .max(20, "Shareable ID is too long")
+      .max(50, "Shareable ID is too long")
       .regex(/^[a-zA-Z0-9]+$/, "Shareable ID can only contain letters and numbers"),
 });
 
