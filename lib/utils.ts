@@ -205,17 +205,78 @@ export const getTransactionStatus = (date: Date) => {
 
 
 export const authFormSchema = (type: string) => z.object({
+
+  //sign up
   
-  // sign-up
-  firstName:type === 'sign-in' ? z.string().optional(): z.string().min(3),
-  lastName: type === 'sign-in' ? z.string().optional():z.string().min(3),
-  address1: type === 'sign-in' ? z.string().optional():z.string().min(5).max(30),
-  city: type === 'sign-in' ? z.string().optional():z.string().min(5).max(30),
-  state: type === 'sign-in' ? z.string().optional():z.string().min(2).max(12),
-  postalCode: type === 'sign-in' ? z.string().optional():z.string().min(4).max(8),
-  dateOfBirth: type === 'sign-in' ? z.string().optional():z.string().min(3),
-  ssn: type === 'sign-in' ? z.string().optional():z.string().min(3),
-  //both sign-up sign-in
-  email: z.string().email(),
-  password: z.string().min(8),
+  firstName: type === "sign-in" 
+  ? z.string().optional() 
+  : z.string()
+      .trim()
+      .min(2, "First name must be at least 2 characters")
+      .regex(/^[a-zA-Z\s]+$/, "First name must only contain letters and spaces"),
+
+  lastName: type === "sign-in" 
+  ? z.string().optional() 
+  : z.string()
+      .trim()
+      .min(2, "Last name must be at least 2 characters")
+      .regex(/^[a-zA-Z]+$/, "Last name must only contain letters"),
+  address1: type === "sign-in" 
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .min(5, "Address must be at least 5 characters")
+      .max(50, "Address too long")
+      .regex(/^[a-zA-Z0-9\s]+$/, "Address must only contain letters, numbers, and spaces"),
+    
+  city: type === "sign-in"
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .min(2, "City must be at least 2 characters")
+      .max(30, "City name too long")
+      .regex(/^[a-zA-Z\s]+$/, "City must only contain letters and spaces"),
+  state: type === "sign-in"
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .length(2, "State must be exactly 2 letters")
+      .regex(/^[A-Z]{2}$/, "State must be 2 uppercase letters (e.g., AZ)"),
+  postalCode: type === "sign-in"
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .length(5, "Postal code must be exactly 5 digits")
+      .regex(/^\d{5}$/, "Postal code must only contain numbers"),
+  dateOfBirth: type === "sign-in"
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Date of Birth must be in YYYY-MM-DD format with only numbers")
+      .refine((date) => {
+        const today = new Date();
+        const [year, month, day] = date.split("-").map(Number);
+        const birthday = new Date(year, month - 1, day);
+        
+        const age = today.getFullYear() - birthday.getFullYear();
+        const m = today.getMonth() - birthday.getMonth();
+        
+        return age > 18 || (age === 18 && m >= 0 && today.getDate() >= birthday.getDate());
+      }, { message: "You must be at least 18 years old" }),
+  ssn: type === "sign-in"
+  ? z.string().optional()
+  : z.string()
+      .trim()
+      .length(4, "SSN must be exactly 4 digits")
+      .regex(/^\d{4}$/, "SSN must only contain numbers"),
+  
+  // bpth sign up and sign in
+  email: z.string().trim().email("Invalid email address"),
+  password: z.string()
+  .min(8, "Password must be at least 8 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+  
 })
