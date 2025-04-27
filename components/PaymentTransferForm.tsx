@@ -30,23 +30,23 @@ import { Textarea } from "./ui/textarea";
 import * as z from "zod";
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  name: z.string()
-    .trim()
-    .min(4, "Transfer note must be at least 4 characters")
-    .max(50, "Transfer note is too long"),
-  amount: z.string()
-    .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount (e.g., 100 or 100.50)")
-    .refine(val => parseFloat(val) > 0, "Amount must be greater than 0"),
-  senderBank: z.string()
-    .trim()
-    .min(4, "Please select a valid bank account")
-    .max(50, "Bank name is too long"),
-  shareableId: z.string()
-    .trim()
-    .min(8, "Shareable ID must be at least 8 characters")
-    .max(50, "Shareable ID is too long")
-    .regex(/^[a-zA-Z0-9]+$/, "Shareable ID can only contain letters and numbers"),
+    email: z.string().email("Invalid email address"),
+    name: z.string()
+      .trim()
+      .min(4, "Transfer note must be at least 4 characters")
+      .max(50, "Transfer note is too long"),
+    amount: z.string()
+      .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount (e.g., 100 or 100.50)"),
+    senderBank: z.string()
+      .trim()
+      .min(4, "Please select a valid bank account")
+      .max(50, "Bank name is too long"),
+      
+    shareableId: z.string()
+      .trim()
+      .min(8, "Shareable ID must be at least 8 characters")
+      .max(50, "Shareable ID is too long")
+      .regex(/^[a-zA-Z0-9]+$/, "Shareable ID can only contain letters and numbers"),
 });
 
 const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {

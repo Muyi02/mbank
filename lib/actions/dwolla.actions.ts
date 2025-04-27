@@ -86,8 +86,15 @@ export const createTransfer = async ({
     return await dwollaClient
       .post("transfers", requestBody)
       .then((res) => res.headers.get("location"));
-  } catch (err) {
-    console.error("Transfer fund failed: ", err);
+  } catch (err : any) {
+    console.error(
+      "Transfer fund failed:",
+      JSON.stringify(
+        err?.response?.data || err,
+        null,
+        2
+      )
+    );
   }
 };
 
